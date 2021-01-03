@@ -1,5 +1,5 @@
 from enum import unique
-from flask import Flask, request, render_template, request, session
+from flask import Flask, request, render_template, request, session, g
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -13,15 +13,21 @@ app.config.update(
 
 db = SQLAlchemy(app)
 
+@app.before_request
+def some_function():
+    g.string = '<br> This code ran before any request'
+
+# BASIC ROUTE
+
 @app.route('/index')
 @app.route('/')
 def index():
-    return "Hello, World again! and Hi!"
+    return "Hello, World again! and Hi! <br>" + g.string
 
 @app.route("/new/")
 def query_string(greeting = 'hello!'):
     query_val = request.args.get("greeting", greeting)
-    return "<h1> The greeting is: {} </h1>".format(query_val)
+    return "<h1> The greeting is: {} </h1>".format(query_val) + g.string
 
 @app.route('/user')
 @app.route('/user/<username>')
