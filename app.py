@@ -1,5 +1,5 @@
 from enum import unique
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -96,6 +96,11 @@ def using_macros():
     }
     return render_template('using_macros.html', movies = movies_dict)
 
+@app.route('/session')
+def session_data():
+    if 'name' not in session:
+        session['name'] = 'Gagan'
+    return render_template('session.html', session=session, name=session['name'])
 
 class Publication(db.Model):
     __tablename__ = 'publication'
